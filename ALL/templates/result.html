@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tool Results</h1>
+{{ output|safe }}
+<a href="{{ url_for('index') }}" class="button">Run Another Test</a>
+{% endblock %}

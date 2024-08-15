@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Web Security Tools</h1>
+<form method="POST" action="{{ url_for('index') }}">
+    <div id="url-container">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url">
+    </div>
+    <div>
+        <label for="tool">Select Tool:</label>
+        <select id="tool" name="tool" required>
+            <option value="1">CSRF Detection</option>
+            <option value="2">SSRF Detection</option>
+            <option value="3">XXE Detection</option>
+            <option value="4">SQL Injection</option>
+            <option value="5">Run All</option>
+        </select>
+    </div>
+    <div id="xxe-params" style="display: none;">
+        <div>
+            <label for="xxe_choice">Select XXE testing method:</label>
+            <select id="xxe_choice" name="xxe_choice" required>
+                <option value="1">Login using username and password</option>
+                <option value="2">Use session cookies</option>
+            </select>
+        </div>
+        <div id="login-params" style="display: none;">
+            <div>
+                <label for="login_url">Enter the login URL:</label>
+                <input type="text" id="login_url" name="login_url">
+            </div>
+            <div>
+                <label for="lab_url">Enter the lab URL:</label>
+                <input type="text" id="lab_url" name="lab_url">
+            </div>
+            <div>
+                <label for="username">Enter your username:</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div>
+                <label for="password">Enter your password:</label>
+                <input type="password" id="password" name="password">
+            </div>
+        </div>
+        <div id="cookie-params" style="display: none;">
+            <div>
+                <label for="lab_url_cookie">Enter the lab URL:</label>
+                <input type="text" id="lab_url_cookie" name="lab_url">
+            </div>
+            <div>
+                <label for="session_cookie">Enter your session cookie:</label>
+                <input type="text" id="session_cookie" name="session_cookie">
+            </div>
+        </div>
+        <div id="xxe-run-option" style="display: none;">
+            <input type="checkbox" id="run_xxe" name="run_xxe">
+            <label for="run_xxe">Include XXE in Run All</label>
+        </div>
+    </div>
+    <div id="additional-params" style="display: none;">
+        <div>
+            <label for="par">Parameter (for SQL Injection):</label>
+            <input type="text" id="par" name="par">
+        </div>
+        <div>
+            <label for="method">Method (GET/POST for SQL Injection):</label>
+            <input type="text" id="method" name="method">
+        </div>
+    </div>
+    <button type="submit">Run Tool</button>
+</form>
+
+<script>
+document.getElementById('tool').addEventListener('change', function() {
+    var tool = this.value;
+    var urlContainer = document.getElementById('url-container');
+    var xxeParams = document.getElementById('xxe-params');
+    var additionalParams = document.getElementById('additional-params');
+    var xxeRunOption = document.getElementById('xxe-run-option');
+
+    if (tool == '3') {
+        xxeParams.style.display = 'block';
+        urlContainer.style.display = 'none';
+        additionalParams.style.display = 'none';
+        xxeRunOption.style.display = 'none';
+    } else if (tool == '4') {
+        additionalParams.style.display = 'block';
+        xxeParams.style.display = 'none';
+        urlContainer.style.display = 'block';
+        xxeRunOption.style.display = 'none';
+    } else if (tool == '5') {
+        xxeParams.style.display = 'block';
+        additionalParams.style.display = 'block';
+        urlContainer.style.display = 'block';
+        xxeRunOption.style.display = 'block';
+    } else {
+        xxeParams.style.display = 'none';
+        additionalParams.style.display = 'none';
+        urlContainer.style.display = 'block';
+        xxeRunOption.style.display = 'none';
+    }
+});
+
+document.getElementById('xxe_choice').addEventListener('change', function() {
+    var choice = this.value;
+    var loginParams = document.getElementById('login-params');
+    var cookieParams = document.getElementById('cookie-params');
+
+    if (choice == '1') {
+        loginParams.style.display = 'block';
+        cookieParams.style.display = 'none';
+    } else if (choice == '2') {
+        loginParams.style.display = 'none';
+        cookieParams.style.display = 'block';
+    }
+});
+</script>
+
+{% endblock %}
